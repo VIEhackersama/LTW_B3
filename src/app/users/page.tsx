@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 
 const roleLabel: Record<string, string> = { admin: 'Admin', retailer: 'Nhà bán lẻ' };
 const roleClass: Record<string, string> = { admin: 'danger', retailer: 'primary' };
@@ -13,9 +14,14 @@ export default async function UsersPage() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1>Người dùng</h1>
-        <p>Quản lý tài khoản khách hàng và nhà bán lẻ</p>
+      <div className="page-header d-flex align-items-start justify-content-between">
+        <div>
+          <h1>Người dùng</h1>
+          <p>Quản lý tài khoản khách hàng và nhà bán lẻ</p>
+        </div>
+        <Link href="/users/new" className="btn-primary-custom">
+          + Thêm người dùng
+        </Link>
       </div>
 
       <div className="content-card">
@@ -64,7 +70,9 @@ export default async function UsersPage() {
                       </span>
                     </td>
                     <td style={{ textAlign: 'center' }}>
-                      <button className="btn-ghost">Sửa</button>
+                      <Link href={`/users/${user.id}/edit`} className="btn-ghost">
+                        Sửa
+                      </Link>
                     </td>
                   </tr>
                 ))

@@ -63,7 +63,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       {/* Thương hiệu */}
       <div className="sidebar-brand">
-        <h2>IMS Admin</h2>
+        <h2>Goods Management System</h2>
         <p>Quản lý xuất nhập hàng</p>
       </div>
 

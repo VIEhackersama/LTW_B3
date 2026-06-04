@@ -38,8 +38,15 @@ export default async function OrdersPage() {
   return (
     <div>
       <div className="page-header">
-        <h1>Đơn hàng</h1>
-        <p>Theo dõi và quản lý toàn bộ đơn hàng của hệ thống</p>
+        <div className="d-flex align-items-start justify-content-between">
+          <div>
+            <h1>Đơn hàng</h1>
+            <p>Theo dõi và quản lý toàn bộ đơn hàng của hệ thống</p>
+          </div>
+          <Link href="/orders/new" className="btn-primary-custom">
+            + Tạo đơn hàng
+          </Link>
+        </div>
       </div>
 
       <div className="content-card">
