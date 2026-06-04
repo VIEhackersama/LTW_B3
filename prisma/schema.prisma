@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+
+  @@map("categories")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique @db.VarChar(50)
+  password     String    @db.VarChar(255)
+  email        String    @unique @db.VarChar(150)
+  phone_number String?   @db.VarChar(20)
+  company_name String?   @db.VarChar(255)
+  tax_code     String?   @db.VarChar(50)
+  role         Role      @default(retailer)
+  status       Status    @default(pending)
+  created_at   DateTime  @default(now())
+  orders       Order[]
+
+  @@map("users")
+}
+
+enum Role {
+  admin
+  retailer
+}
+
+enum Status {
+  pending
+  active
+  banned
+}
+
+model Product {
+  id                Int           @id @default(autoincrement())
+  sku               String        @unique @db.VarChar(50)
+  name              String        @db.VarChar(255)
+  wholesale_price   Decimal       @db.Decimal(15, 2)
+  min_order_qty     Int           @default(1)
+  stock_quantity    Int           @default(0)
+  status            ProductStatus @default(active)
+  category_id       Int?
+  manufacturer_name String?       @db.VarChar(255)
+  origin_country    String?       @db.VarChar(100)
+  image_url         String?       @db.VarChar(255)
+  created_at        DateTime      @default(now())
+
+  category   Category?   @relation(fields: [category_id], references: [id])
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  active
+  inactive
+}
+
+model Order {
+  id               Int           @id @default(autoincrement())
+  retailer_id      Int?
+  shipping_address String        @db.Text
+  receiver_name    String?       @db.VarChar(100)
+  receiver_phone   String?       @db.VarChar(20)
+  shipping_fee     Decimal       @default(0) @db.Decimal(15, 2)
+  total_amount     Decimal       @default(0) @db.Decimal(15, 2)
+  payment_method   PaymentMethod
+  payment_status   PaymentStatus @default(unpaid)
+  status           OrderStatus   @default(pending)
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  user       User?       @relation(fields: [retailer_id], references: [id])
+  orderItems OrderItem[]
+
+  @@map("orders")
+}
+
+enum PaymentMethod {
+  bank_transfer
+  cod
+  credit_debt
+}
+
+enum PaymentStatus {
+  unpaid
+  partially_paid
+  paid
+}
+
+enum OrderStatus {
+  pending
+  approved
+  shipping
+  completed
+  cancelled
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  order_id   Int?
+  product_id Int?
+  quantity   Int
+  unit_price Decimal  @db.Decimal(15, 2)
+
+  order   Order?   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [product_id], references: [id])
+
+  @@map("order_items")
+}
