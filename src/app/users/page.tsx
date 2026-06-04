@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import GrantAdminButton from "./GrantAdminButton";
 
 const roleLabel: Record<string, string> = { admin: 'Admin', retailer: 'Nhà bán lẻ' };
 const roleClass: Record<string, string> = { admin: 'danger', retailer: 'primary' };
@@ -70,6 +71,7 @@ export default async function UsersPage() {
                       </span>
                     </td>
                     <td style={{ textAlign: 'center' }}>
+                      <GrantAdminButton userId={user.id} currentRole={user.role} currentStatus={user.status} />
                       <Link href={`/users/${user.id}/edit`} className="btn-ghost">
                         Sửa
                       </Link>
