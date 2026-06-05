@@ -1,0 +1,37 @@
+HƯỚNG DẪN KHỞI ĐỘNG PROJECT
+===========================
+
+Project này sử dụng Next.js, Prisma ORM và cơ sở dữ liệu MySQL.
+Dưới đây là các bước cần thiết để khởi chạy dự án sau khi clone về máy:
+
+1. Cài đặt các dependencies:
+   Mở terminal tại thư mục gốc của project (LTW_B3) và chạy lệnh:
+   npm install
+
+2. Cấu hình CSDL (MySQL):
+   - Đảm bảo bạn đã cài đặt và đang chạy MySQL Server trên máy (có thể dùng XAMPP, Laragon, MySQL Workbench, v.v.).
+   - Kiểm tra file `.env` ở thư mục gốc. 
+   - Cập nhật chuỗi kết nối `DATABASE_URL` cho phù hợp với cấu hình MySQL của bạn.
+     Ví dụ: DATABASE_URL="mysql://root:mat_khau_cua_ban@localhost:3306/tester001"
+     (Nếu tài khoản root không có mật khẩu, bạn có thể để trống như hiện tại: "mysql://root:@localhost:3306/tester001")
+
+3. Khởi tạo Database và Bảng:
+   - Hiện tại dự án đang trỏ đến database tên là `tester001`. Nếu chưa có, bạn cần mở MySQL (qua phpMyAdmin, DBeaver, v.v.) và tạo một database trống mang tên `tester001` (hoặc tên khác nếu bạn đã đổi trong .env).
+   - Sau đó, tạo các bảng trong database bằng lệnh:
+     npx prisma db push
+   - Lệnh này sẽ đồng bộ cấu trúc bảng từ file `prisma/schema.prisma` vào MySQL.
+
+4. Cập nhật Prisma Client:
+   (Lưu ý: Bắt buộc chạy lại nếu có thay đổi ở file schema.prisma)
+   Chạy lệnh sau để ứng dụng có thể giao tiếp được với database:
+   npx prisma generate
+
+5. Nạp dữ liệu mẫu (Seeding):
+   - Dự án có cung cấp sẵn file `seed.sql` chứa các dữ liệu mẫu cần thiết.
+   - Hãy import file `seed.sql` này vào database `tester001` của bạn (ví dụ: dùng tính năng Import trong phpMyAdmin, hoặc chạy query trực tiếp trong MySQL Workbench).
+
+6. Khởi chạy ứng dụng:
+   Khi mọi thứ đã sẵn sàng, hãy khởi động server ở chế độ development bằng lệnh:
+   npm run dev
+
+   Truy cập http://localhost:3000 trên trình duyệt để xem kết quả.
